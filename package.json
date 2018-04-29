@@ -1,13 +1,20 @@
 {
   "name": "homebridge-mi-plug",
-  "version": "0.0.1",
-  "description": "mi plug plugin for homebridge",
-  "license": "ISC",
+  "version": "1.0.0",
+  "description": "Xiaomi Mi Plug plugin for Homebridge.",
+  "license": "MIT",
   "keywords": [
-    "homebridge-mi-plug"
+    "homebridge-plugin",
+    "xiaomi",
+    "mi plug"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/find1e/homebridge-mi-plug.git"
+  },
   "engines": {
     "node": ">=0.12.0",
-    "homebridge": ">=0.2.0"
+    "homebridge": ">=0.2.0",
+    "miio": ">=0.14.1"
   }
 }
