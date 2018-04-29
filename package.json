@@ -1,6 +1,6 @@
 {
   "name": "homebridge-mi-plug",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Xiaomi Mi Plug plugin for Homebridge.",
   "license": "MIT",
   "keywords": [
