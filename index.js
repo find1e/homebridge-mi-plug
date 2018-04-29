@@ -25,7 +25,7 @@ function MiPlug(log, config) {
 
 
 	// Register the service
-	this.service = new Service.MiPlug(this.name);
+ 	this.service = new Service.Switch(this.name);
 
 	this.service
 		.getCharacteristic(Characteristic.Active)
@@ -36,11 +36,6 @@ function MiPlug(log, config) {
 		.getCharacteristic(Characteristic.LockPhysicalControls)
 		.on('get', this.getLockPhysicalControls.bind(this))
 		.on('set', this.setLockPhysicalControls.bind(this));
-
-	this.service
-		.getCharacteristic(Characteristic.RotationSpeed)
-		.on('get', this.getRotationSpeed.bind(this))
-		.on('set', this.setRotationSpeed.bind(this));
 
 	// Service information
 	this.serviceInfo = new Service.AccessoryInformation();
@@ -53,29 +48,6 @@ function MiPlug(log, config) {
 	this.services.push(this.service);
 	this.services.push(this.serviceInfo);
 	
-	// Register the Lightbulb service (LED / Display)
-	this.lightBulbService = new Service.LightBulb(this.name + "LED");
-
-	this.lightBulbService
-		.getCharacteristic(Characteristic.On)
-		.on('get', this.getLED.bind(this))
-		.on('set', this.setLED.bind(this));
-	
-	this.services.push(this.lightBulbService);
-	
-	// Register the Filer Maitenance service
-	this.filterMaintenanceService = new Service.FilterMaintenance(this.name + "Filter");
-
-	this.filterMaintenanceService
-		.getCharacteristic(Characteristic.FilterChangeIndication)
-		.on('get', this.getFilterChange.bind(this));
-	
-	this.filterMaintenanceService
-		.addCharacteristic(Characteristic.FilterLifeLevel)
-		.on('get', this.getFilterLife.bind(this));
-	
-	this.services.push(this.filterMaintenanceService);
-
 	this.discover();
 }
 
@@ -129,44 +101,6 @@ MiPlug.prototype = {
 				callback(err);
 			});
 	},
-
-    getLED: function(callback) {
-            this.device.call('get_prop', ['led'])
-                .then(result => {
-                        callback(null, result[0] === 'on' ? true : false);
-                })
-                .catch(err => {
-                        callback(err);
-                });
-    },
-
-    setLED: function(state, callback) {
-            this.device.call('set_led', [(state) ? 'on' : 'off'])
-                    .then(result => {
-                            (result[0] === 'ok') ? callback() : callback(new Error(result[0]));
-                    })
-                    .catch(err => {
-                            callback(err);
-                    });
-    },
-
-    getFilterChange: function(callback) {
-            this.device.call('get_prop', ['filter1_life'])
-                    .then(result => {
-                            callback(null, result[0] < 5 ? Characteristic.FilterChangeIndication.CHANGE_FILTER : Characteristic$);
-       				 }).catch(err => {
-                            callback(err);
-                    });
-	},
-
-	getFilterLife: function(callback) {
-                this.device.call('get_prop', ['filter1_life'])
-                    .then(result => {
-                            callback(null, result[0]);
-        			}).catch(err => {
-                            callback(err);
-                    });
-    },
 
 	identify: function(callback) {
 		callback();
