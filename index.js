@@ -31,12 +31,7 @@ function MiPlug(log, config) {
 		.getCharacteristic(Characteristic.Active)
 		.on('get', this.getActive.bind(this))
 		.on('set', this.setActive.bind(this));
-
-	this.service
-		.getCharacteristic(Characteristic.LockPhysicalControls)
-		.on('get', this.getLockPhysicalControls.bind(this))
-		.on('set', this.setLockPhysicalControls.bind(this));
-
+	
 	// Service information
 	this.serviceInfo = new Service.AccessoryInformation();
 
@@ -77,27 +72,6 @@ MiPlug.prototype = {
 				(result[0] === 'ok') ? callback() : callback(new Error(result[0]));
 			})
 			.catch(err => {
-				callback(err);
-			});
-	},
-
-	
-
-	getLockPhysicalControls: function(callback) {
-		this.device.call('get_prop', ['child_lock'])
-			.then(result => {
-				callback(null, result[0] === 'on' ? Characteristic.LockPhysicalControls.CONTROL_LOCK_ENABLED : Characteristic.LockPhysicalControls.CONTROL_LOCK_DISABLED);
-			})
-			.catch(err => {
-				callback(err);
-			});
-	},
-
-	setLockPhysicalControls: function(state, callback) {
-		this.device.call('set_child_lock', [(state) ? 'on' : 'off'])
-			.then(result => {
-				(result[0] === 'ok') ? callback() : callback(new Error(result[0]));
-			}).catch(err => {
 				callback(err);
 			});
 	},
